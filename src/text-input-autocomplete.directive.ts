@@ -88,6 +88,8 @@ export class TextInputAutocompleteDirective implements OnDestroy {
 
   private menuHidden$ = new Subject();
 
+  private usingShortcut = false;
+
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
@@ -98,24 +100,43 @@ export class TextInputAutocompleteDirective implements OnDestroy {
   @HostListener('keypress', ['$event.key'])
   onKeypress(key: string) {
     if (key === this.triggerCharacter) {
+      this.usingShortcut = false;
       this.showMenu();
+    }
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    // Binds to space and ctrlkey; keyCode and code are both used for broader compatibility
+    if ((event.keyCode === 32 || event.code === '32') && event.ctrlKey) {
+      this.usingShortcut = true;
+      this.showMenu();
+      this.onChange('');
     }
   }
 
   @HostListener('input', ['$event.target.value'])
   onChange(value: string) {
     if (this.menu) {
-      if (value[this.menu.triggerCharacterPosition] !== this.triggerCharacter) {
+      if (
+        value[this.menu.triggerCharacterPosition] !== this.triggerCharacter &&
+        !this.usingShortcut
+      ) {
         this.hideMenu();
       } else {
         const cursor = this.elm.nativeElement.selectionStart;
         if (cursor < this.menu.triggerCharacterPosition) {
           this.hideMenu();
         } else {
+          if (this.usingShortcut && !this.menu) {
+            value = this.triggerCharacter;
+          }
+          const offset = this.usingShortcut ? 0 : 1;
           const searchText = value.slice(
-            this.menu.triggerCharacterPosition + 1,
+            this.menu.triggerCharacterPosition + offset,
             cursor
           );
+
           if (!searchText.match(this.searchRegexp)) {
             this.hideMenu();
           } else {

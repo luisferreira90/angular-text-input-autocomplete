@@ -130,6 +130,15 @@ describe('text-input-autocomplete directive', () => {
     expect(getMenu()).to.be.ok;
   });
 
+  it('should show a menu when the shortcut combo is typed', () => {
+    const event = new KeyboardEvent('keydown', {
+      code: '32',
+      ctrlKey: true
+    });
+    textarea.nativeElement.dispatchEvent(event);
+    expect(getMenu()).to.be.ok;
+  });
+
   it('should call find choices with the search text', () => {
     typeInTextarea('test @derp');
     expect(component.findChoices).to.have.been.calledWith('derp');
