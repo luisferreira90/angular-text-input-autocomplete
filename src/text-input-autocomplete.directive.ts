@@ -37,6 +37,11 @@ export class TextInputAutocompleteDirective implements OnDestroy {
   @Input() triggerCharacter = '@';
 
   /**
+   * An optional keyboard shortcut that will trigger the menu to appear
+   */
+  @Input() keyboardShortcut: (event: KeyboardEvent) => boolean;
+
+  /**
    * The regular expression that will match the search text after the trigger character
    */
   @Input() searchRegexp = /^\w*$/;
@@ -107,8 +112,7 @@ export class TextInputAutocompleteDirective implements OnDestroy {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    // Binds to space and ctrlkey; keyCode and code are both used for broader compatibility
-    if ((event.keyCode === 32 || event.code === '32') && event.ctrlKey) {
+    if (this.keyboardShortcut && this.keyboardShortcut(event)) {
       this.usingShortcut = true;
       this.showMenu();
       this.onChange('');

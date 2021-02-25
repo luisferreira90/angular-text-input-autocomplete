@@ -25,6 +25,7 @@ import { By } from '@angular/platform-browser';
         [findChoices]="findChoices"
         [getChoiceLabel]="getChoiceLabel"
         [triggerCharacter]="triggerCharacter"
+        [keyboardShortcut]='shortcut'
         [searchRegexp]="searchRegexp"
         [menuComponent]="menuComponent"
         [closeMenuOnBlur]="closeMenuOnBlur"
@@ -46,6 +47,8 @@ class TestComponent {
   menuHidden = sinon.spy();
   choiceSelected = sinon.spy();
   closeMenuOnBlur = false;
+  shortcut = (event: KeyboardEvent) =>
+    (event.keyCode === 32 || event.code === '32') && event.ctrlKey;
 }
 
 @Component({
