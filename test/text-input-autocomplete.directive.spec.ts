@@ -25,7 +25,7 @@ import { By } from '@angular/platform-browser';
         [findChoices]="findChoices"
         [getChoiceLabel]="getChoiceLabel"
         [triggerCharacter]="triggerCharacter"
-        [keyboardShortcut]='shortcut'
+        [keyboardShortcut]="shortcut"
         [searchRegexp]="searchRegexp"
         [menuComponent]="menuComponent"
         [closeMenuOnBlur]="closeMenuOnBlur"
