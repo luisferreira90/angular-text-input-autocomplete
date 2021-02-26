@@ -34,7 +34,7 @@ const names = [
         rows="5"
         [(ngModel)]="formControlValue"
         mwlTextInputAutocomplete
-        [keyboardShortcut]='shortcut'
+        [keyboardShortcut]="shortcut"
         [findChoices]="findChoices"
         [getChoiceLabel]="getChoiceLabel">
       </textarea>
